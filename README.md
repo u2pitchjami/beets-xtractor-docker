@@ -12,26 +12,115 @@ Ce projet fournit une solution Docker combinant [Beets](https://beets.io/) et [E
 
 This project provides a Docker solution combining [Beets](https://beets.io/) and [Essentia](https://essentia.upf.edu/) through the Xtractor plugin to manage, analyze, and enrich your music library. With this container, you benefit from a ready-to-use setup for complex tasks such as audio feature extraction or advanced metadata management.
 
+Install Beets + plugins (fetchart embedart scrub lastgenre duplicates hook discogs missing permissions keyfinder mbsync inline ftintitle xtractor beatport4 discogs replaygain web bpsync badfiles web)
+
 ---
 
 ## Prérequis / Prerequisites
 
-1. **Système :** Linux, Windows, ou MacOS avec Docker installé.  
-   **System:** Linux, Windows, or MacOS with Docker installed.
-2. **Outils :**  
-   **Tools:**
-   - Docker (et Docker Compose si nécessaire)  
-     Docker (and Docker Compose if needed)
-   - [VSCode](https://code.visualstudio.com/) (optionnel, mais recommandé pour un développement facilité)  
-     [VSCode](https://code.visualstudio.com/) (optional, but recommended for easier development)
-3. **Accès à Internet** pour télécharger les dépendances.  
-   **Internet access** to download dependencies.
+1. **System:** Linux, Windows, or MacOS with Docker installed.
+2. **Tools:**
+   - Docker (and Docker Compose if needed)
+   - [VSCode](https://code.visualstudio.com/) (optional, but recommended for easier development)
 
 ---
+## Download and use the Docker image
 
-## Structure du projet / Project Structure
+### Instructions for Docker Hub
 
-Voici la structure recommandée pour le projet :  
+1. **Download the Docker image :**
+
+   ```bash
+   docker pull u2pitchjami/beets-xtractor
+   ```
+
+2. **Start container :**
+
+   ```bash
+   docker run --rm -it \
+       -v $(pwd)/config:/app/config \
+       -v /path/to/music:/app/data \
+       -p 8337:8337 \
+       <your-dockerhub-username>/beets-xtractor beet <command>
+   ```
+
+  For example:
+
+   ```bash
+   docker run --rm -it \
+       -v $(pwd)/config:/app/config \
+       -v /path/to/music:/app/data \
+       -p 8337:8337 \
+       <your-dockerhub-username>/beets-xtractor beet import /app/data
+   ```
+
+## Using Docker Compose
+
+Here is an example `docker-compose.yml` file for this project:
+
+```yaml
+services:
+  beets:
+    image: u2pitchjami/beets-xtractor
+    container_name: beets-xtractor
+    network_mode: bridge
+    ports:
+      - "8337:8337"
+    volumes:
+      - ./config:/app/config
+      - /path/to/music:/app/data
+    environment:
+      BEETSDIR: /app/config
+      tty: true
+```
+
+### How to Use
+
+1. **Make your config.yalm and place it in /config (see config.yalm.example)**
+   
+2. **Take your music in /data or make another link docker compose**
+
+2. **Start the Container**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Run Beets Commands**
+   To run a Beets command, use the following syntax:
+   ```bash
+   docker-compose run --rm beets beet <command>
+   ```
+   For example:
+   ```bash
+   docker-compose run --rm beets beet import /app/data
+   ```
+
+## Using Bash Alias
+
+For ease of use, you can create a Bash alias to simplify running Beets commands. Add the following line to your `.bashrc` or `.zshrc` file:
+
+```bash
+alias beet-docker='docker-compose run --rm -p 8443:8337 beets beet'
+```
+
+After adding this alias, reload your shell configuration:
+
+```bash
+source ~/.bashrc
+```
+
+Now, you can use the alias to run Beets commands directly. For example:
+
+```bash
+beet-docker import /app/data
+```
+
+Si vous avez des questions ou des améliorations à suggérer, n'hésitez pas à ouvrir une issue ou une pull request sur le dépôt GitHub !  
+If you have questions or improvements to suggest, feel free to open an issue or pull request on the GitHub repository!
+
+
+## Project Structure
+
 Here is the recommended project structure:
 
 ```
@@ -51,27 +140,19 @@ beets-xtractor-docker/
 └── README.md
 ```
 
-**Description des éléments :**  
 **Description of elements:**
 
-- **Dockerfile :** Instructions pour créer l’image Docker.  
-  **Dockerfile:** Instructions to build the Docker image.
-- **config/** : Contient les fichiers de configuration pour Beets.  
-  **config/**: Contains configuration files for Beets.
-- **scripts/** : Contient des scripts d’automatisation (par exemple `entrypoint.sh`).  
-  **scripts/**: Contains automation scripts (e.g., `entrypoint.sh`).
-- **assets/** : Contient les fichiers sources nécessaires au projet (comme Essentia, Eigen, SWIG, Gaia, et Eiden).  
-  **assets/**: Contains source files required for the project (like Essentia, Eigen, SWIG, Gaia, and Eiden).
-- **data/** : Dossier partagé où seront placés les fichiers audio à traiter.  
-  **data/**: Shared folder where audio files to process will be placed.
-- **README.md :** Documentation explicative pour GitHub.  
-  **README.md:** Explanatory documentation for GitHub.
+- **Dockerfile:** Instructions to build the Docker image.
+- **config/**: Contains configuration files for Beets.
+- **scripts/**: Contains automation scripts (e.g., `entrypoint.sh`).
+- **assets/**: Contains source files required for the project (like Essentia, Eigen, SWIG, Gaia, and Eiden).
+- **data/**: Shared folder where audio files to process will be placed.
+- **README.md:** Explanatory documentation for GitHub.
 
 ---
 
-## Création du Dockerfile / Creating the Dockerfile
+## Creating the Dockerfile
 
-Voici le contenu du fichier `Dockerfile` :  
 Here is the content of the `Dockerfile`:
 
 ```dockerfile
@@ -201,40 +282,6 @@ LABEL org.opencontainers.image.licenses "MIT"
 ```
 
 ---
-
-## Télécharger et utiliser l'image Docker / Download and use the Docker image
-
-### Instructions pour Docker Hub / Instructions for Docker Hub
-
-1. **Télécharger l'image :**
-
-   ```bash
-   docker pull u2pitchjami/beets-xtractor
-   ```
-
-2. **Lancer un conteneur :**
-
-   ```bash
-   docker run --rm -it \
-       -v $(pwd)/config:/app/config \
-       -v /path/to/music:/app/data \
-       -p 8337:8337 \
-       <your-dockerhub-username>/beets-xtractor beet <command>
-   ```
-
-   Par exemple / For example:
-
-   ```bash
-   docker run --rm -it \
-       -v $(pwd)/config:/app/config \
-       -v /path/to/music:/app/data \
-       -p 8337:8337 \
-       <your-dockerhub-username>/beets-xtractor beet import /app/data
-   ```
-
-Si vous avez des questions ou des améliorations à suggérer, n'hésitez pas à ouvrir une issue ou une pull request sur le dépôt GitHub !  
-If you have questions or improvements to suggest, feel free to open an issue or pull request on the GitHub repository!
-
 ## Authors
 
 👤 **u2pitchjami**
