@@ -3,6 +3,10 @@
 # Beets + Xtractor Docker : Un environnement conteneurisé pour la gestion et l'analyse musicale / A containerized environment for music management and analysis
 
 [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/u2pitchjami/beets-xtractor)](https://hub.docker.com/repository/docker/u2pitchjami/beets-xtractor/general)
+![Docker Pulls](https://img.shields.io/docker/pulls/u2pitchjami/beets-xtractor)  
+![Docker Image Size](https://img.shields.io/docker/image-size/u2pitchjami/beets-xtractor/latest)  
+![GitHub last commit](https://img.shields.io/github/last-commit/u2pitchjami/beets-xtractor-docker)  
+![License](https://img.shields.io/github/license/u2pitchjami/beets-xtractor-docker)
 ![GitHub stars](https://img.shields.io/github/stars/u2pitchjami/beets-xtractor-docker)
 ![GitHub forks](https://img.shields.io/github/forks/u2pitchjami/beets-xtractor-docker)
 
