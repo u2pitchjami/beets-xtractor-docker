@@ -1,0 +1,13 @@
+services:
+  beets:
+    image: beets-xtractor
+    container_name: beets-xtractor
+    network_mode: bridge
+    ports:
+      - "8337:8337"
+    volumes:
+      - /home/pipo/beets-xtractor-docker/config:/app/config
+      - /mnt/user/Musiques/Collection:/app/data
+    environment:
+      BEETSDIR: /app/config
+    tty: true
