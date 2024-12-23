@@ -13,8 +13,11 @@
 
 /assets/*
 /config/svm_models
+/config/lastgenre
 *.json
 *.yaml
 *.log
 *.blb
 *.pickle
+*.manuel
+*.auto
