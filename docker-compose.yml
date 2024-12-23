@@ -1,6 +1,6 @@
 services:
   beets:
-    image: beets-xtractor
+    image: u2pitchjami/beets-xtractor:latest
     container_name: beets-xtractor
     network_mode: bridge
     ports:
@@ -8,6 +8,8 @@ services:
     volumes:
       - /home/pipo/beets-xtractor-docker/config:/app/config
       - /mnt/user/Musiques/Collection:/app/data
+      - /mnt/user/Musiques/Atrier:/app/import
     environment:
       BEETSDIR: /app/config
+    entrypoint: ["/app/entrypoint.sh"]
     tty: true
