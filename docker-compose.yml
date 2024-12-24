@@ -11,5 +11,10 @@ services:
       - /mnt/user/Musiques/Atrier:/app/import
     environment:
       BEETSDIR: /app/config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     entrypoint: ["/app/entrypoint.sh"]
     tty: true

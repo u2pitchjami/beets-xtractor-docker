@@ -2,6 +2,7 @@
 FROM debian:bullseye-slim
 
 # Install system dependencies
+COPY assets/* /app/
 RUN apt-get update && apt-get install -y \
     python3-pip python3-gi \
     cmake build-essential \
@@ -11,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libyaml-dev qtbase5-dev \
     libfftw3-dev libavcodec-dev libavformat-dev libavresample-dev libswresample-dev libavutil-dev libtag1-dev libchromaprint-dev libsamplerate0-dev \
     libcairo2-dev \
+    libjpeg-dev libpng-dev libtiff-dev libwebp-dev libtool libxml2-dev libfontconfig-dev libfreetype6-dev liblcms2-dev libopenexr-dev libx11-dev libxext-dev libxt-dev \
     && ln -s /usr/bin/python3 /usr/bin/python \
     && qmake --version \
     && ffmpeg -version \
@@ -18,45 +20,37 @@ RUN apt-get update && apt-get install -y \
 
 # Add python alias for waf compatibility
 ENV CXXFLAGS="-I/usr/local/include/eigen3"
-
-
-
 # Set working directory
 WORKDIR /app
-
 # Install SWIG
-COPY assets/swig-3.0.12.tar.gz /app/
 RUN cd /app \
     && tar -xzf swig-3.0.12.tar.gz \
     && cd swig-3.0.12 \
     && ./configure \
     && make \
     && make install \
-    && rm -rf /app/swig-3.0.12 /app/swig-3.0.12.tar.gz
-    
+    && rm -rf /app/swig-3.0.12 /app/swig-3.0.12.tar.gz \
 # Install Eigen
-COPY assets/eigen-3.4.0.tar.gz /app/
-RUN cd /app \
+    && cd /app \
     && tar -xzf eigen-3.4.0.tar.gz \
     && cd eigen-3.4.0 \
     && mkdir build \
     && cd build \
     && cmake .. \
     && make install \
-    && rm -rf /app/eigen-3.4.0 /app/eigen-3.4.0.tar.gz
+    && rm -rf /app/eigen-3.4.0 /app/eigen-3.4.0.tar.gz \
+    && cd /app \
 # Install Gaia from GitHub
-RUN git clone https://github.com/MTG/gaia.git /app/gaia \
+    && git clone https://github.com/MTG/gaia.git /app/gaia \
     && cd /app/gaia \
     && ./waf configure --with-python-bindings --with-asserts \
     && ./waf build \
     && ./waf install \
     && ldconfig \
-    && rm -rf /app/gaia
-
+    && rm -rf /app/gaia \
+    && cd /app \
 # Extract and build Essentia + SVM models for Essentia
-COPY assets/essentia-2.1_beta5.tar.gz /app/
-COPY assets/essentia-extractor-svm_models-v2.1_beta5.tar.gz /app/
-RUN pip3 install numpy==1.19.5 pycairo \
+    && pip3 install numpy==1.19.5 pycairo \
     && cd /app \
     && tar -xzf essentia-2.1_beta5.tar.gz \
     && cd essentia-2.1_beta5 \
@@ -83,31 +77,31 @@ RUN cd /app \
     && make \
     && make install \
     && ldconfig \
-    && rm -rf /app/ImageMagick.tar.gz /app/ImageMagick-*
-
+    && rm -rf /app/ImageMagick.tar.gz /app/ImageMagick-* \
+    && cd /app \
     # Install libkeyfinder dependency
-RUN git clone https://github.com/mixxxdj/libkeyfinder.git /app/libkeyfinder \
+    && git clone https://github.com/mixxxdj/libkeyfinder.git /app/libkeyfinder \
     && cd /app/libkeyfinder \
     && cmake -DCMAKE_INSTALL_PREFIX=/usr/local -S . -B build \
     && cmake --build build --parallel $(nproc) \
     && cmake --install build \
     && ldconfig \
-    && rm -rf /app/libkeyfinder
-
+    && rm -rf /app/libkeyfinder \
+    && cd /app \
 # Install Keyfinder from GitHub
-RUN git clone https://github.com/evanpurkhiser/keyfinder-cli.git /app/keyfinder-cli \
+    && git clone https://github.com/evanpurkhiser/keyfinder-cli.git /app/keyfinder-cli \
     && cd /app/keyfinder-cli \
     && git submodule update --init --recursive \
     && make \
     && make install \
     && ldconfig \
     && rm -rf /app/keyfinder-cli
-
+COPY scripts/keyfinder-camelot.sh /bin/
 # Install Beets
 RUN pip3 install beets==2.1.0 \
     Flask requests-oauthlib \
     beets[fetchart,thumbnails,embedart,scrub,lyrics,autobpm,discog,replaygain,chroma,web] \
-    discogs_client beets-beatport4 beets-xtractor beetcamp beets-yearfixer beets-describe beets-check \
+    python3-discogs-client beets-beatport4 beets-xtractor beetcamp beets-yearfixer beets-describe beets-check \
     && python3 -m pip install beets-autogenre
     
 # Copy default config
@@ -117,6 +111,7 @@ COPY config/beatport_credentials.yaml.example /app/default_config/beatport_crede
 # Set entrypoint script
 COPY scripts/entrypoint.sh /app/
 RUN chmod +x /app/entrypoint.sh \
+    && chmod +x /bin/keyfinder-camelot.sh \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/app/entrypoint.sh"]
