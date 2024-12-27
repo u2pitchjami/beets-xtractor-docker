@@ -6,7 +6,7 @@ services:
     ports:
       - "8337:8337"
     volumes:
-      - /home/pipo/beets-xtractor-docker/config:/app/config
+      - /home/pipo/bin/beets-xtractor-docker/config:/app/config
       - /mnt/user/Musiques/Collection:/app/data
       - /mnt/user/Musiques/Atrier:/app/import
     environment:

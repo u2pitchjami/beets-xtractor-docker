@@ -119,6 +119,27 @@ Now, you can use the alias to run Beets commands directly. For example:
 ```bash
 beet-docker import /app/data
 ```
+## Using a Script in $PATH (for users and scripts)
+
+alias is good for interactive session but not for script, so :
+
+```bash
+sudo nano /usr/local/bin/beet
+```
+
+```bash
+#!/bin/bash
+docker compose -f /home/pipo/bin/beets-xtractor-docker/docker-compose.yml run --rm -p 8337:8337 beets beet "$@"
+```
+
+make it executable :
+
+```bash
+sudo chmod +x /usr/local/bin/beet
+```
+
+Now, you can use "beet" for your scripts
+
 
 Si vous avez des questions ou des améliorations à suggérer, n'hésitez pas à ouvrir une issue ou une pull request sur le dépôt GitHub !  
 If you have questions or improvements to suggest, feel free to open an issue or pull request on the GitHub repository!
