@@ -1,0 +1,13 @@
+# This is a comment, to show how #-prefixed lines are ignored.
+# It is possible to specify requirements as plain names.
+requests-oauthlib
+python3-discogs-client
+beets
+beets[fetchart,thumbnails,embedart,scrub,lyrics,discog,replaygain,chroma,web]
+beets-beatport4            
+beets-xtractor
+beetcamp
+beets-yearfixer
+beets-check
+beets-autogenre
+numpy==1.19.5
