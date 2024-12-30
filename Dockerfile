@@ -5,14 +5,25 @@ FROM debian:bullseye-slim
 COPY assets/* /app/
 RUN apt-get update && apt-get install -y \
     python3-pip python3-gi \
-    cmake build-essential \
-    wget git pkg-config \
-    ffmpeg mp3val flac \
+    wget git \
+    mp3val flac \
     libpcre3-dev \
-    libyaml-dev qtbase5-dev \
-    libfftw3-dev libavcodec-dev libavformat-dev libavresample-dev libswresample-dev libavutil-dev libtag1-dev libchromaprint-dev libsamplerate0-dev \
+    # for Gaia :
+    qtbase5-dev pkg-config libtag1-dev \
+    # for Gaia & chroma plugin :
+    libchromaprint-dev \
+    # for Gaia & Essentia :
+    python3-dev libyaml-dev build-essential \
+    # for Essentia :
+    yasm python3-numpy-dev python3-six ffmpeg libavcodec-dev libavformat-dev libswresample-dev libavutil-dev libsamplerate0-dev \
+    #for Essentia & librekey
+    cmake libfftw3-dev \
+    libavresample-dev \
     libcairo2-dev \
+    # for Magick
     libjpeg-dev libpng-dev libtiff-dev libwebp-dev libtool libxml2-dev libfontconfig-dev libfreetype6-dev liblcms2-dev libopenexr-dev libx11-dev libxext-dev libxt-dev \
+    # for Essentia :
+    && pip3 install numpy==1.19.5 pycairo==1.20.1 \
     && ln -s /usr/bin/python3 /usr/bin/python \
     && qmake --version \
     && ffmpeg -version \
@@ -22,7 +33,7 @@ RUN apt-get update && apt-get install -y \
 ENV CXXFLAGS="-I/usr/local/include/eigen3"
 # Set working directory
 WORKDIR /app
-# Install SWIG
+# Install SWIG for Gaia
 RUN cd /app \
     && tar -xzf swig-3.0.12.tar.gz \
     && cd swig-3.0.12 \
@@ -30,7 +41,7 @@ RUN cd /app \
     && make \
     && make install \
     && rm -rf /app/swig-3.0.12 /app/swig-3.0.12.tar.gz \
-# Install Eigen
+# Install Eigen for Gaia & Essentia
     && cd /app \
     && tar -xzf eigen-3.4.0.tar.gz \
     && cd eigen-3.4.0 \
@@ -50,7 +61,6 @@ RUN cd /app \
     && rm -rf /app/gaia \
     && cd /app \
 # Extract and build Essentia + SVM models for Essentia
-    && pip3 install numpy==1.19.5 pycairo \
     && cd /app \
     && tar -xzf essentia-2.1_beta5.tar.gz \
     && cd essentia-2.1_beta5 \
@@ -68,7 +78,7 @@ RUN cd /app \
     && rm -rf /app/essentia-extractor-svm_models-v2.1_beta5 /app/essentia-extractor-svm_models-v2.1_beta5.tar.gz \
     && rm -rf /app/essentia-2.1_beta5 /app/essentia-2.1_beta5.tar.gz
 
- # Install ImageMagick from source
+ # Install ImageMagick from source for fetchart & thumbnails & embedart
 RUN cd /app \
     && wget https://download.imagemagick.org/ImageMagick/download/ImageMagick.tar.gz \
     && tar -xzf ImageMagick.tar.gz \
@@ -79,7 +89,7 @@ RUN cd /app \
     && ldconfig \
     && rm -rf /app/ImageMagick.tar.gz /app/ImageMagick-* \
     && cd /app \
-    # Install libkeyfinder dependency
+    # Install libkeyfinder dependency for Keyfinder-cli
     && git clone https://github.com/mixxxdj/libkeyfinder.git /app/libkeyfinder \
     && cd /app/libkeyfinder \
     && cmake -DCMAKE_INSTALL_PREFIX=/usr/local -S . -B build \
@@ -98,10 +108,15 @@ RUN cd /app \
     && rm -rf /app/keyfinder-cli
 COPY scripts/keyfinder-camelot.sh /bin/
 # Install Beets
-RUN pip3 install beets==2.1.0 \
-    Flask requests-oauthlib \
+RUN pip3 install beets \
     beets[fetchart,thumbnails,embedart,scrub,lyrics,autobpm,discog,replaygain,chroma,web] \
-    python3-discogs-client beets-beatport4 beets-xtractor beetcamp beets-yearfixer beets-describe beets-check \
+    beets-beatport4 beets-xtractor beetcamp beets-yearfixer beets-describe beets-check \
+    #for web plugin
+    Flask \
+    # for discogs
+    python3-discogs-client requests-oauthlib \
+    # for autobpm
+    && python -m pip install librosa \
     && python3 -m pip install beets-autogenre
     
 # Copy default config
