@@ -2,6 +2,7 @@ services:
   beets:
     image: u2pitchjami/beets-xtractor:test
     container_name: beets-xtractor
+    user: 99:100
     network_mode: bridge
     ports:
       - "8337:8337"
@@ -10,7 +11,11 @@ services:
       - /mnt/user/Musiques/Collection:/app/data
       - /mnt/user/Musiques/Atrier:/app/import
     environment:
-      BEETSDIR: /app/config
+      - HOME=/tmp
+      #- PUID=pipo #nobody
+      #- PGID=users #users
+      - TZ=Europe/Paris
+      - BEETSDIR=/app/config
     logging:
       driver: "json-file"
       options:
