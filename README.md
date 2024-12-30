@@ -46,7 +46,7 @@ Install Beets + plugins (inline ftintitle discogs bandcamp beatport4 mbsync auto
        -v $(pwd)/config:/app/config \
        -v /path/to/music:/app/data \
        -p 8337:8337 \
-       <your-dockerhub-username>/beets-xtractor beet <command>
+       u2pitchjami/beets-xtractor beet <command>
    ```
 
   For example:
@@ -56,7 +56,7 @@ Install Beets + plugins (inline ftintitle discogs bandcamp beatport4 mbsync auto
        -v $(pwd)/config:/app/config \
        -v /path/to/music:/app/data \
        -p 8337:8337 \
-       <your-dockerhub-username>/beets-xtractor beet import /app/data
+       u2pitchjami/beets-xtractor beet import /app/data
    ```
 
 ## Using Docker Compose
@@ -324,3 +324,13 @@ LABEL org.opencontainers.image.licenses "MIT"
 * Twitter: [@u2pitchjami](https://twitter.com/u2pitchjami)
 * Github: [@u2pitchjami](https://github.com/u2pitchjami)
 * LinkedIn: [@LinkedIn](https://linkedin.com/in/thierry-beugnet-a7761672)
+
+## Plugins Documentation
+
+- [beets-autogenre](https://github.com/mgoltzsche/beets-autogenre)
+- [BeetsPluginXtractor](https://github.com/adamjakab/BeetsPluginXtractor)
+- [BeetsPluginYearFixer](https://github.com/adamjakab/BeetsPluginYearFixer)
+- [BeetsPluginDescribe](https://github.com/adamjakab/BeetsPluginDescribe)
+- [beets-beatport4](https://github.com/Samik081/beets-beatport4)
+- [Beetcamp](https://github.com/snejus/beetcamp)
+- [beets-check](https://github.com/geigerzaehler/beets-check)
