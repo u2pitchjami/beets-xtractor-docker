@@ -1,6 +1,6 @@
 services:
   beets:
-    image: u2pitchjami/beets-xtractor:test
+    image: u2pitchjami/beets-xtractor:latest
     container_name: beets-xtractor
     user: 99:100
     network_mode: bridge
