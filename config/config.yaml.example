@@ -1,5 +1,5 @@
 plugins: fetchart embedart scrub lastgenre duplicates hook discogs missing permissions keyfinder mbsync inline ftintitle xtractor beatport4 discogs replaygain web mbsync badfiles
-directory: /app/data
+directory: /app/music
 library: /app/config/collection.blb
 threaded: yes
 original_date: no

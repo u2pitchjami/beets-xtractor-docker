@@ -1,13 +1,16 @@
 services:
   beets:
-    image: u2pitchjami/beets-xtractor:latest
+    image: beets-xtractor:latest_test2
     container_name: beets-xtractor
-    user: 99:100
+    user: 1000:1000
     network_mode: bridge
     ports:
       - "8337:8337"
     volumes:
-      - /home/pipo/bin/beets-xtractor-docker/config:/app/config
+      - /home/pipo/data/appdata/beets-xtractor-docker/config:/app/config
+      - /home/pipo/data/appdata/beets-xtractor-docker/xtractor:/app/xtractor
+      - /home/pipo/data/db/beets-xtractor:/app/db
+      - /home/pipo/data/logs/beets-xtractor:/app/logs
       - /mnt/user/Musiques/Collection:/app/data
       - /mnt/user/Musiques/Atrier:/app/import
     environment:

@@ -21,3 +21,4 @@
 *.pickle
 *.manuel
 *.auto
+config/config.yaml.normal
