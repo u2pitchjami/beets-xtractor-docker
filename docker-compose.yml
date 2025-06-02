@@ -1,7 +1,7 @@
 services:
   beets:
-    image: beets-xtractor:latest_test2
-    container_name: beets-xtractor
+    image: beets-mixonaut:latest
+    container_name: beets-mixonaut
     user: 1000:1000
     network_mode: bridge
     ports:
