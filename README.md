@@ -1,6 +1,6 @@
 # 🗃️ Projet archivé
 
-> Ce dépôt a été fusionné dans [BRAIN OPS](https://github.com/u2pitchjami/mixonaut).
+> Ce dépôt a été fusionné dans [MIXONAUT](https://github.com/u2pitchjami/mixonaut).
 >
 >
 > > Aucune modification ne sera faite ici. Merci de contribuer sur le dépôt principal.
