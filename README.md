@@ -1,3 +1,13 @@
+# 🗃️ Projet archivé
+
+> Ce dépôt a été fusionné dans [BRAIN OPS](https://github.com/u2pitchjami/mixonaut).
+>
+>
+> > Aucune modification ne sera faite ici. Merci de contribuer sur le dépôt principal.
+
+
+
+
 ![beets-xtractor-docker](https://socialify.git.ci/u2pitchjami/beets-xtractor-docker/image?font=Jost&language=1&logo=https%3A%2F%2Fgreen-berenice-35.tiiny.site%2Fimage2vector-3.svg&name=1&owner=1&pattern=Charlie+Brown&stargazers=1&theme=Dark)
 
 # Beets + Xtractor Docker : Un environnement conteneurisé pour la gestion et l'analyse musicale / A containerized environment for music management and analysis
